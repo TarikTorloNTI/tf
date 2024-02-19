@@ -4,9 +4,7 @@ require 'sqlite3'
 require 'bcrypt'
 require 'sinatra/reloader'
 
-enable :sessions
-user-id = 1
-user-id = session[:key1].to_i
+
 
 
 get('/') do
@@ -42,4 +40,36 @@ post('/gymlog/new') do
   db = SQLite3::Database.new("db/user.db")
   db.execute("INSERT INTO gymlog (dag, exercise) VALUES (?,?)", dag, exercise)
   redirect('/gymlog')
+end
+
+get('/gymlog/:id/edit') do
+  id = params[:id].to_i
+  db = SQLite3::Database.new("db/user.db")
+  db.results_as_hash = true
+  @result = db.execute("SELECT * FROM gymlog WHERE id=?",id).first
+  slim(:"gymlog/edit")
+end
+
+post('/gymlog/:id/update') do
+  id = params[:id].to_i
+  dag = params[:dag]
+  exercise = params[:exercise]
+  db = SQLite3::Database.new("db/user.db")
+  db.execute("UPDATE gymlog SET dag=?, exercise=? WHERE id = ?", dag, exercise, id)
+  redirect('/gymlog')
+end
+
+
+get('/type') do
+  db = SQLite3::Database.new("db/user.db")
+  db.results_as_hash = true
+  @result = db.execute("SELECT * FROM type")
+  slim(:"type/index2")
+end
+
+get('/index2/chest') do
+  db = SQLite3::Database.new("db/user.db")
+  db.results_as_hash = true
+  @result = db.execute("SELECT * FROM exercise WHERE type-id = 3")
+  slim(:"exercise/chest")
 end
