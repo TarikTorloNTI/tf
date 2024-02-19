@@ -67,9 +67,10 @@ get('/type') do
   slim(:"type/index2")
 end
 
-get('/index2/chest') do
+get('/index2/:type_of') do
   db = SQLite3::Database.new("db/user.db")
   db.results_as_hash = true
-  @result = db.execute("SELECT * FROM exercise WHERE type-id = 3")
+  type_of = params[:type_of]
+  @result = db.execute("SELECT * FROM exercise WHERE 'type-id'=?", type_of)
   slim(:"exercise/chest")
 end
