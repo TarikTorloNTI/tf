@@ -3,8 +3,9 @@ require 'slim'
 require 'sqlite3'
 require 'bcrypt'
 require 'sinatra/reloader'
+require 'sinatra/flash'
 
-
+enable :sessions
 
 
 get('/') do
@@ -70,7 +71,53 @@ end
 get('/index2/:type_of') do
   db = SQLite3::Database.new("db/user.db")
   db.results_as_hash = true
-  type_of = params[:type_of]
-  @result = db.execute("SELECT * FROM exercise WHERE 'type-id'=?", type_of)
-  slim(:"exercise/chest")
+  type_of = params[:type_of].to_i
+  @result = db.execute("SELECT * FROM exercise WHERE \"type-id\" = ?", type_of)
+  slim(:"exercise/index3")
 end
+
+
+post('/exercise/:id/delete') do
+  id = params[:id].to_i
+  db = SQLite3::Database.new("db/user.db")
+  db.execute("DELETE FROM exercise WHERE id = ?",id)
+  redirect('/type')
+end
+
+
+
+get('/exercise/new') do
+  db = SQLite3::Database.new("db/user.db")
+  db.results_as_hash = true
+  @result = db.execute("SELECT * FROM type")
+  slim(:"exercise/new2")
+end
+
+
+post('/exercise/new') do
+  exercise = params[:exercise]
+  type_id = params[:type_id].to_i
+  db = SQLite3::Database.new("db/user.db")
+  db.execute("INSERT INTO exercise (exercise, \"type-id\" VALUES (?, ?)", exercise, type_id)
+  redirect('/type')
+end
+
+
+
+
+get('/exercise/:id/edit') do
+  id = params[:id].to_i
+  db = SQLite3::Database.new("db/user.db")
+  db.results_as_hash = true
+  @result = db.execute("SELECT * FROM exercise WHERE id=?",id).first
+  slim(:"exercise/edit2")
+end
+
+post('/exercise/:id/update') do
+  id = params[:id].to_i
+  exercise = params[:exercise]
+  db = SQLite3::Database.new("db/user.db")
+  db.execute("UPDATE exercise SET exercise=? WHERE id = ?", exercise, id)
+  redirect('/type')
+end
+

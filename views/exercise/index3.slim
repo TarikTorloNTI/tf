@@ -1,0 +1,12 @@
+a href="/exercise/new" Lägg till nya övningar
+
+
+ul 
+    - @result.each do |time|
+        li
+            h2 = time['exercises']
+
+        a href="/exercise/#{time['id']}/edit"
+        
+        form method="POST" action="/exercise/#{time['id']}/delete"
+            input type="submit" value="Delete"

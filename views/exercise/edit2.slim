@@ -1,0 +1,6 @@
+form action="/exercise/#{@result['id']}/update" method="post"
+  
+  label for="exercise" Övning
+  input type="text" name="exercise" id="exercise" value=@result['exercise']
+  
+  input type="submit" value="Uppdatera"
