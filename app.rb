@@ -9,14 +9,77 @@ enable :sessions
 
 
 get('/') do
-    slim(:start)
+    slim(:start, layout: :login_layout)
+end
+
+
+get('/showlogin') do
+  slim(:login, layout: :login_layout)
+end
+
+post('/login') do
+  username = params[:username]
+  password = params[:password]
+  db = SQLite3::Database.new('db/user.db')
+  db.results_as_hash = true
+  result = db.execute("SELECT * FROM user WHERE username = ?",username).first
+  password_digest = result["password"]
+  id = result["id"]
+
+  if BCrypt::Password.new(password_digest) == password
+    redirect('/start_login')
+  else
+    "FEL LÖSEN!"
+  end
+end
+
+get('/todos') do 
+  id = session[:id].to_i
+  db = SQLite3::Database.new('db/user.db')
+  db.results_as_hash = true
+  result = db.execute("SELECT * FROM user WHERE user_id = ?",id)
+  p "Alla todos från result #{result}"
+  slim(:"todos/index",locals:{todos:result})
+end
+
+
+get('/start_login') do 
+  slim(:loggedin)
+end
+
+post('/users/new') do
+  username = params[:username]
+  password = params[:password]
+  password_confirm = params[:password_confirm]
+
+  if (password == password_confirm)
+    #Lägg till användare
+    password_digest = BCrypt::Password.create(password)
+    db = SQLite3::Database.new('db/user.db')
+    role = 1
+    db.execute("INSERT INTO user (username,password,role) VALUES (?,?,?)", username,password_digest,role)
+    redirect('/')
+
+  else
+    #Felhantering
+    "Lösenorden matchade inte!"
+  end
+end
+
+
+
+
+
+def current_user_id
+  @user_id
 end
 
 
 get('/gymlog') do
     db = SQLite3::Database.new("db/user.db")
     db.results_as_hash = true
-    @result = db.execute("SELECT * FROM gymlog")
+    @user_id = current_user_id
+    @result = db.execute("SELECT * FROM gymlog WHERE \"user-id\"=?", @user_id)
 
     slim(:"gymlog/index")
 end
@@ -39,7 +102,8 @@ post('/gymlog/new') do
   dag = params[:dag]
   exercise = params[:exercise].to_i
   db = SQLite3::Database.new("db/user.db")
-  db.execute("INSERT INTO gymlog (dag, exercise) VALUES (?,?)", dag, exercise)
+  @user_id = current_user_id
+  db.execute("INSERT INTO gymlog (exercise, dag, \"user-id\") VALUES (?,?,?)", dag, exercise, @user_id)
   redirect('/gymlog')
 end
 
