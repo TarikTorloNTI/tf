@@ -98,7 +98,7 @@ post('/exercise/new') do
   exercise = params[:exercise]
   type_id = params[:type_id].to_i
   db = SQLite3::Database.new("db/user.db")
-  db.execute("INSERT INTO exercise (exercise, \"type-id\" VALUES (?, ?)", exercise, type_id)
+  db.execute("INSERT INTO exercise (exercise, \"type-id\") VALUES (?, ?)", exercise, type_id)
   redirect('/type')
 end
 
