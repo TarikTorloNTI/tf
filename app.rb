@@ -22,16 +22,25 @@ post('/login') do
   password = params[:password]
   db = SQLite3::Database.new('db/user.db')
   db.results_as_hash = true
-  result = db.execute("SELECT * FROM user WHERE username = ?",username).first
+  result = db.execute("SELECT * FROM user WHERE username = ?", username).first
   password_digest = result["password"]
   id = result["id"]
 
   if BCrypt::Password.new(password_digest) == password
+    session[:user_id] = result["id"]
+    session[:role_value] = 1
     redirect('/start_login')
   else
     "FEL LÖSEN!"
   end
 end
+
+get('/guest_login') do
+  session[:role_value] = 0 # Sätt rollen till 0 för gästanvändaren
+  redirect('/start_login')
+end
+
+
 
 get('/todos') do 
   id = session[:id].to_i
@@ -46,6 +55,11 @@ end
 get('/start_login') do 
   slim(:loggedin)
 end
+
+# get('/guest_log')
+#   session[:user_id] = nil 
+#   session[:role] = 0 
+# end
 
 post('/users/new') do
   username = params[:username]
@@ -76,13 +90,20 @@ end
 
 
 get('/gymlog') do
+  if session[:role_value] == 1
+    puts "Användarens roll är: Vanlig"
     db = SQLite3::Database.new("db/user.db")
     db.results_as_hash = true
-    @user_id = current_user_id
-    @result = db.execute("SELECT * FROM gymlog WHERE \"user-id\"=?", @user_id)
-
+    @result = db.execute("SELECT * FROM gymlog WHERE \"user-id\"=?", session[:user_id])
     slim(:"gymlog/index")
+  else
+    puts "Användarens roll är: Gäst"
+    slim(:"gymlog/guest")
+  end
 end
+
+
+
 
 
 post('/gymlog/:id/delete') do
@@ -94,18 +115,32 @@ end
 
 
 get('/gymlog/new') do
-  slim(:"gymlog/new")
+  if session[:user_id].nil?
+    redirect('/showlogin')
+  else
+    slim(:"gymlog/new")
+  end
 end
 
 
 post('/gymlog/new') do
   dag = params[:dag]
-  exercise = params[:exercise].to_i
-  db = SQLite3::Database.new("db/user.db")
-  @user_id = current_user_id
-  db.execute("INSERT INTO gymlog (exercise, dag, \"user-id\") VALUES (?,?,?)", dag, exercise, @user_id)
-  redirect('/gymlog')
+  exercise = params[:exercise]
+  user_id = session[:user_id] # Hämta användarens ID från sessionen
+
+  begin
+    db = SQLite3::Database.new("db/user.db")
+    db.execute("INSERT INTO gymlog (dag, exercise, \"user-id\") VALUES (?, ?, ?)", dag, exercise, user_id)
+    redirect('/gymlog')
+  rescue SQLite3::Exception => e
+    puts "An error occurred: #{e}"
+    redirect('/gymlog/new') # Vid fel, omdirigera tillbaka till sidan för att skapa en ny gymlog
+  end
 end
+
+
+
+
 
 get('/gymlog/:id/edit') do
   id = params[:id].to_i
