@@ -1,12 +1,9 @@
 a href="/exercise/new" Lägg till nya övningar
 
-
 ul 
-    - @result.each do |time|
-        li
-            h2 = time['exercises']
-
-        a href="/exercise/#{time['id']}/edit"
-        
-        form method="POST" action="/exercise/#{time['id']}/delete"
-            input type="submit" value="Delete"
+  - @result.each do |exercise|
+    li
+      h2 = exercise['exercise']
+      a href="/exercise/#{exercise['id']}/edit" Redigera
+      form method="POST" action="/exercise/#{exercise['id']}/delete"
+        input type="submit" value="Delete"

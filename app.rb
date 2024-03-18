@@ -7,6 +7,13 @@ require 'sinatra/flash'
 
 enable :sessions
 
+#Fixa inner joins
+#Fixa admin behörighet att role = 2
+#Gäst ska inte ha någon behörighet att redigera eller ta bort övningarna i se övningar
+#Vanlig användare (role = 1) ska kunna se/ha sin gymlog och även se alla övningar men inte redigera/ta bort
+#Admin (role = 2) ska kunna göra allt detta och därmed om admin ändrar någonting i se övningar är det synligt för alla användare 
+#Fixa CSS
+#Fixa också så att man kan logga ut
 
 get('/') do
     slim(:start, layout: :login_layout)
@@ -193,13 +200,18 @@ get('/exercise/new') do
 end
 
 
+
 post('/exercise/new') do
   exercise = params[:exercise]
-  type_id = params[:type_id].to_i
+  type_id = params['type-id'].to_i  # Använd sträng för att undvika fel på kolumnnamn
   db = SQLite3::Database.new("db/user.db")
   db.execute("INSERT INTO exercise (exercise, \"type-id\") VALUES (?, ?)", exercise, type_id)
   redirect('/type')
 end
+
+
+
+
 
 
 
