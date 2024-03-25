@@ -32,15 +32,29 @@ post('/login') do
   result = db.execute("SELECT * FROM user WHERE username = ?", username).first
   password_digest = result["password"]
   id = result["id"]
+  role = result["role"]
+  role_name = case role
+              when 0
+                "Gäst"
+              when 1
+                "Vanlig användare"
+              when 2
+                "Administratör"
+              else
+                "Okänd roll"
+              end
 
   if BCrypt::Password.new(password_digest) == password
-    session[:user_id] = result["id"]
-    session[:role_value] = 1
-    redirect('/start_login')
+    session[:user_id] = id
+    session[:role_value] = role.to_i  # Konvertera rollen till en siffra
+    puts "Användarens roll är: #{role_name}"
+    redirect '/start_login'
   else
     "FEL LÖSEN!"
   end
 end
+
+
 
 get('/guest_login') do
   session[:role_value] = 0 # Sätt rollen till 0 för gästanvändaren
@@ -74,17 +88,26 @@ post('/users/new') do
   password_confirm = params[:password_confirm]
 
   if (password == password_confirm)
-    #Lägg till användare
     password_digest = BCrypt::Password.create(password)
     db = SQLite3::Database.new('db/user.db')
-    role = 1
-    db.execute("INSERT INTO user (username,password,role) VALUES (?,?,?)", username,password_digest,role)
+    role = 1 # Standard roll för nya användare
+    role = 2 if username == "admin" # Om användaren registreras som "admin", sätt roll till 2
+    db.execute("INSERT INTO user (username,password,role) VALUES (?,?,?)", username, password_digest, role)
     redirect('/')
-
   else
-    #Felhantering
     "Lösenorden matchade inte!"
   end
+end
+
+# För att hantera administratörsbehörigheter när du bygger administratörsfunktioner
+def admin_required!
+  redirect '/start_login' unless session[:role_value] == 2
+end
+
+# Exempel på användning av admin_required!-metoden för att begränsa åtkomst till administratörsfunktioner
+get '/admin_dashboard' do
+  admin_required!
+  slim :admin_dashboard
 end
 
 
@@ -174,13 +197,24 @@ get('/type') do
   slim(:"type/index2")
 end
 
-get('/index2/:type_of') do
+# GET-rutin för att visa sidan för en specifik muskelgrupp och dess övningar
+get '/index2/:type_of' do
   db = SQLite3::Database.new("db/user.db")
   db.results_as_hash = true
   type_of = params[:type_of].to_i
   @result = db.execute("SELECT * FROM exercise WHERE \"type-id\" = ?", type_of)
+  @user_role = session[:role_value]  # Hämta användarens roll från sessionen
+
+  # Kontrollera om användaren är administratör (roll = 2)
+  if @user_role == 2
+    @admin_access = true  # Visa knappar för redigering, borttagning och lägg till ny övning
+  else
+    @admin_access = false  # Dölj knappar för användare med andra roller
+  end
+
   slim(:"exercise/index3")
 end
+
 
 
 post('/exercise/:id/delete') do

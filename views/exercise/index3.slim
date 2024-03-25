@@ -1,9 +1,16 @@
-a href="/exercise/new" Lägg till nya övningar
+- if @admin_access
+  a href="/exercise/new" Lägg till ny övning
 
-ul 
-  - @result.each do |exercise|
-    li
-      h2 = exercise['exercise']
-      a href="/exercise/#{exercise['id']}/edit" Redigera
-      form method="POST" action="/exercise/#{exercise['id']}/delete"
-        input type="submit" value="Delete"
+table
+  thead
+    tr
+      h2 Övningar
+  tbody
+    - @result.each do |row|
+      tr
+        td= row['exercise']
+        - if @admin_access
+          td
+            a href="/exercise/#{row['id']}/edit" Redigera
+            form action="/exercise/#{row['id']}/delete" method="post"
+              input type="submit" value="Ta bort"
