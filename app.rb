@@ -8,12 +8,7 @@ require 'sinatra/flash'
 enable :sessions
 
 #Fixa inner joins
-#Fixa admin behörighet att role = 2
-#Gäst ska inte ha någon behörighet att redigera eller ta bort övningarna i se övningar
-#Vanlig användare (role = 1) ska kunna se/ha sin gymlog och även se alla övningar men inte redigera/ta bort
-#Admin (role = 2) ska kunna göra allt detta och därmed om admin ändrar någonting i se övningar är det synligt för alla användare 
 #Fixa CSS
-#Fixa också så att man kan logga ut
 
 get('/') do
     slim(:start, layout: :login_layout)
@@ -54,6 +49,10 @@ post('/login') do
   end
 end
 
+post('/logout') do
+  session.clear
+  redirect '/'
+end
 
 
 get('/guest_login') do
@@ -63,14 +62,7 @@ end
 
 
 
-get('/todos') do 
-  id = session[:id].to_i
-  db = SQLite3::Database.new('db/user.db')
-  db.results_as_hash = true
-  result = db.execute("SELECT * FROM user WHERE user_id = ?",id)
-  p "Alla todos från result #{result}"
-  slim(:"todos/index",locals:{todos:result})
-end
+
 
 
 get('/start_login') do 
@@ -122,6 +114,12 @@ end
 get('/gymlog') do
   if session[:role_value] == 1
     puts "Användarens roll är: Vanlig"
+    db = SQLite3::Database.new("db/user.db")
+    db.results_as_hash = true
+    @result = db.execute("SELECT * FROM gymlog WHERE \"user-id\"=?", session[:user_id])
+    slim(:"gymlog/index")
+  elsif session[:role_value] == 2
+    puts "Användarens roll är: Administratör"
     db = SQLite3::Database.new("db/user.db")
     db.results_as_hash = true
     @result = db.execute("SELECT * FROM gymlog WHERE \"user-id\"=?", session[:user_id])

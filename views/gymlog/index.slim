@@ -13,6 +13,22 @@
     a href="/gymlog/#{time['id']}/edit" Edit
     form method="POST" action="/gymlog/#{time['id']}/delete"
       input type="submit" value="Delete"
+- elsif session[:role_value] == 2
+  h2 Create new gymlog
+  a href="/gymlog/new" Ny gymlog
+
+  - @result.each do |time|
+    p ________________________________________________________________
+    p Datum:       
+    p = time['dag'] 
+    p Övning/muskelgrupp:
+    p = time['exercise']
+    p ________________________________________________________________  
+
+    a href="/gymlog/#{time['id']}/edit" Edit
+    form method="POST" action="/gymlog/#{time['id']}/delete"
+      input type="submit" value="Delete"
+
 - else
   h2 Du måste vara inloggad för att se gymlog
   p Du kan logga in <a href="/showlogin">här</a>.
