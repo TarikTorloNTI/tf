@@ -69,10 +69,6 @@ get('/start_login') do
   slim(:loggedin)
 end
 
-# get('/guest_log')
-#   session[:user_id] = nil 
-#   session[:role] = 0 
-# end
 
 post('/users/new') do
   username = params[:username]

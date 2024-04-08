@@ -1,34 +1,27 @@
-- if session[:role_value] == 1
-  h2 Create new gymlog
-  a href="/gymlog/new" Ny gymlog
+doctype html
+html lang="en"
+  head
+    meta charset="UTF-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    link rel="stylesheet" href="/css/style.css"
+    title Gymlog
+  body
+    - if session[:role_value] == 1 || session[:role_value] == 2
+      h2 Skapa en ny gymlog
+      a href="/gymlog/new" class="button" Ny gymlog
 
-  - @result.each do |time|
-    p ________________________________________________________________
-    p Datum:       
-    p = time['dag'] 
-    p Övning/muskelgrupp:
-    p = time['exercise']
-    p ________________________________________________________________  
+      - @result.each do |time|
+        section.log-entry
+          article
+            h3 = time['dag']
+            p Övning/muskelgrupp: #{time['exercise']}
+          div
+            a href="/gymlog/#{time['id']}/edit" class="edit-button" Redigera
+          div
+            form method="POST" action="/gymlog/#{time['id']}/delete"
+              button type="submit" class="delete-button" Ta bort
 
-    a href="/gymlog/#{time['id']}/edit" Edit
-    form method="POST" action="/gymlog/#{time['id']}/delete"
-      input type="submit" value="Delete"
-- elsif session[:role_value] == 2
-  h2 Create new gymlog
-  a href="/gymlog/new" Ny gymlog
-
-  - @result.each do |time|
-    p ________________________________________________________________
-    p Datum:       
-    p = time['dag'] 
-    p Övning/muskelgrupp:
-    p = time['exercise']
-    p ________________________________________________________________  
-
-    a href="/gymlog/#{time['id']}/edit" Edit
-    form method="POST" action="/gymlog/#{time['id']}/delete"
-      input type="submit" value="Delete"
-
-- else
-  h2 Du måste vara inloggad för att se gymlog
-  p Du kan logga in <a href="/showlogin">här</a>.
+    - else
+      h2 Du måste vara inloggad för att se gymloggen
+      p Du kan logga in 
+        a href="/showlogin" här

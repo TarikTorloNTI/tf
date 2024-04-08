@@ -1,57 +1,162 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color:rgb(226, 255, 255)
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
+
+body, input, button {
+    font-family: 'Montserrat', sans-serif;
+    color: #000000;
+    font-weight: 300;
+    line-height: 1.75;
 }
 
-nav {
-    background-color: #333;
-    padding: 10px;
-    display: flex;
-    justify-content: center; /* Centrera elementen längs huvudaxeln (horisontellt) */
-    align-items: center; /* Centrera elementen längs tvärsaxeln (vertikalt) */
-}
-
-nav a {
-    color: #fff;
-    text-decoration: none;
-    margin-right: 10px;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
-
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-form {
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    color: #0a8d48;
     margin-bottom: 20px;
 }
 
-input[type="text"],
-input[type="password"],
-button {
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+:root {
+    --primary-color: #10a957; /* Grön */
+    --secondary-color: #f2f2f2; /* Ljusgrå */
+    --accent-color: #0056b3; /* Blå */
+    --text-color: #000000; /* Mörkgrå */
+    --light-text-color: #000000; /* Ljusgrå text */
+    --background-color: #b0ffe2; /* Vit */
 }
 
-button {
-    background-color: #333;
-    color: #fff;
+body {
+    background-color: var(--background-color);
+}
+
+a, button, input[type="submit"] {
+    color: var(--primary-color);
+}
+
+a:hover, button:hover, input[type="submit"]:hover {
+    color: var(--accent-color);
+}
+
+/* Navigationsmeny */
+nav {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 5%;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 10px;
+}
+
+nav a {
+    color: white;
+    padding: 0 15px;
+}
+
+/* Huvudinnehållsstilar */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Skuggor och Rundade Hörn */
+.card {
+    background: var(--secondary-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Knappar och Input-fält */
+button, input[type="submit"], input[type="text"], input[type="password"] {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+button:hover, input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Responsiv Design */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+    }
+}
+
+
+
+.log-entry {
+    background-color: #f2f2f2; /* Ljusgrå */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.log-entry article {
+    margin-bottom: 15px;
+}
+
+.log-entry h3 {
+    color: #0a8d48; /* Din primära färg */
+    margin-bottom: 10px;
+}
+
+.log-entry p {
+    color: #333; /* Mörkgrå */
+    font-size: 16px;
+}
+
+
+
+
+
+
+
+
+.button {
+    display: inline-block;
+    background-color: #0a8d48; /* Primärfärg för knappen */
+    color: white; /* Textfärg */
+    padding: 10px 15px; /* Inre marginaler för att göra knappen större */
+    text-decoration: none; /* Ta bort understrykning */
+    font-weight: bold; /* Gör texten fet */
+    border-radius: 10px; /* Rundade hörn */
+    transition: background-color 0.3s ease; /* Gör övergången mjuk när musen hovrar */
+    margin-bottom: 20px;
+  }
+  
+  .button:hover {
+    background-color: #087334; /* En mörkare nyans av primärfärgen för hover-effekt */
+  }
+  
+  .button:active {
+    background-color: #065c29; /* Ännu mörkare för klick-effekt */
+  }
+  
+
+
+
+  .edit-button, .delete-button {
+    display: inline-block;
+    margin: 5px 0; /* Lägger till vertikal marginal */
+    padding: 4px 7px;
+    text-decoration: none; /* Tar bort understrykning för länkar */
+    color: #FFF; /* Vit text */
+    font-weight: bold;
+    border: none;
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #555;
-}
-
+  }
+  
+  .edit-button {
+    background-color: #0a8d48; 
+    border-radius: 10px;
+  }
+  
+  .delete-button {
+    background-color: #DC3545; /* Exempel: Röd för ta bort */
+    border-radius: 10px;
+  }
+  
