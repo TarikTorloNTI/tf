@@ -16,7 +16,7 @@ h1, h2, h3, h4, h5, h6 {
 :root {
     --primary-color: #10a957; /* Grön */
     --secondary-color: #f2f2f2; /* Ljusgrå */
-    --accent-color: #0056b3; /* Blå */
+    --accent-color: #97dba3; /* Blå */
     --text-color: #000000; /* Mörkgrå */
     --light-text-color: #000000; /* Ljusgrå text */
     --background-color: #b0ffe2; /* Vit */
@@ -71,6 +71,8 @@ button, input[type="submit"], input[type="text"], input[type="password"] {
     padding: 10px 15px;
     border-radius: 10px;
     transition: all 0.3s ease;
+    color: black;
+    margin: 1px;
 }
 
 button:hover, input[type="submit"]:hover {
@@ -160,3 +162,72 @@ button:hover, input[type="submit"]:hover {
     border-radius: 10px;
   }
   
+
+
+
+
+  .button-style {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 5px;
+    background-color: #0a8d48; /* Blå bakgrund */
+    color: white; /* Vit text */
+    text-decoration: none; /* Tar bort understrykningen */
+    border-radius: 5px; /* Lägger till rundade hörn */
+    transition: background-color 0.2s; /* Lägger till en mjuk övergångseffekt */
+    font-weight: bold; /* Gör texten fet */
+    font-size: 17px;
+  }
+  
+  .button-style:hover {
+    background-color: #087334; /* En mörkare nyans av blått för hover-effekt */
+  }
+  
+  .button:active {
+    background-color: #065c29; /* Ännu mörkare för klick-effekt */
+  }
+
+
+
+
+
+  .button-style2 {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 5px;
+    background-color: #0a8d48; /* Blå bakgrund */
+    color: white; /* Vit text */
+    text-decoration: none; /* Tar bort understrykningen */
+    border-radius: 5px; /* Lägger till rundade hörn */
+    transition: background-color 0.2s; /* Lägger till en mjuk övergångseffekt */
+    font-weight: bold; /* Gör texten fet */
+  }
+  
+  .button-style2:hover {
+    background-color: #087334; /* En mörkare nyans av blått för hover-effekt */
+  }
+
+
+
+
+
+  .button-style3 {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 1px;
+    background-color: #0a8d48; /* Blå bakgrund */
+    color: white; /* Vit text */
+    text-decoration: none; /* Tar bort understrykningen */
+    border-radius: 5px; /* Lägger till rundade hörn */
+    transition: background-color 0.2s; /* Lägger till en mjuk övergångseffekt */
+    font-weight: bold; /* Gör texten fet */
+  }
+  
+  .button-style3:hover {
+    background-color: #087334; /* En mörkare nyans av blått för hover-effekt */
+  }
+  
+
+p{
+    font-weight: bold;
+}
