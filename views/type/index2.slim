@@ -1,4 +1,6 @@
 ul 
+  h2 Tryck på valfri muskelgrupp för att få tips på övningar
   - @result.each do |time|
     li
       a href="/index2/#{time['id']}" class="button-style2" = time['muscle-group']
+  
