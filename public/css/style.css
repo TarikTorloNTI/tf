@@ -13,13 +13,17 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 20px;
 }
 
+p {
+  font-weight: bold;
+}
+
 :root {
-    --primary-color: #10a957; /* Grön */
-    --secondary-color: #f2f2f2; /* Ljusgrå */
-    --accent-color: #97dba3; /* Blå */
-    --text-color: #000000; /* Mörkgrå */
-    --light-text-color: #000000; /* Ljusgrå text */
-    --background-color: #b0ffe2; /* Vit */
+    --primary-color: #10a957; 
+    --secondary-color: #f2f2f2; 
+    --accent-color: #97dba3;
+    --text-color: #000000; 
+    --light-text-color: #000000; 
+    --background-color: #b0ffe2;
 }
 
 body {
@@ -33,6 +37,8 @@ a, button, input[type="submit"] {
 a:hover, button:hover, input[type="submit"]:hover {
     color: var(--accent-color);
 }
+
+
 
 /* Navigationsmeny */
 nav {
@@ -49,14 +55,12 @@ nav a {
     padding: 0 15px;
 }
 
-/* Huvudinnehållsstilar */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* Skuggor och Rundade Hörn */
 .card {
     background: var(--secondary-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -65,7 +69,6 @@ nav a {
     margin-bottom: 20px;
 }
 
-/* Knappar och Input-fält */
 button, input[type="submit"], input[type="text"], input[type="password"] {
     border: none;
     padding: 10px 15px;
@@ -80,12 +83,12 @@ button:hover, input[type="submit"]:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* Responsiv Design */
 @media (max-width: 768px) {
     nav {
         flex-direction: column;
     }
 }
+
 
 
 
@@ -102,51 +105,45 @@ button:hover, input[type="submit"]:hover {
 }
 
 .log-entry h3 {
-    color: #0a8d48; /* Din primära färg */
+    color: #0a8d48; 
     margin-bottom: 10px;
 }
 
 .log-entry p {
-    color: #333; /* Mörkgrå */
+    color: #333; 
     font-size: 16px;
 }
 
 
 
-
-
-
-
-
 .button {
     display: inline-block;
-    background-color: #0a8d48; /* Primärfärg för knappen */
-    color: white; /* Textfärg */
-    padding: 10px 15px; /* Inre marginaler för att göra knappen större */
-    text-decoration: none; /* Ta bort understrykning */
-    font-weight: bold; /* Gör texten fet */
-    border-radius: 10px; /* Rundade hörn */
-    transition: background-color 0.3s ease; /* Gör övergången mjuk när musen hovrar */
+    background-color: #0a8d48; 
+    color: white;
+    padding: 10px 15px; 
+    text-decoration: none; 
+    font-weight: bold; 
+    border-radius: 10px; 
+    transition: background-color 0.3s ease; 
     margin-bottom: 20px;
   }
   
   .button:hover {
-    background-color: #087334; /* En mörkare nyans av primärfärgen för hover-effekt */
+    background-color: #087334;
   }
   
   .button:active {
-    background-color: #065c29; /* Ännu mörkare för klick-effekt */
+    background-color: #065c29;
   }
   
-
 
 
   .edit-button, .delete-button {
     display: inline-block;
-    margin: 5px 0; /* Lägger till vertikal marginal */
+    margin: 5px 0; 
     padding: 4px 7px;
-    text-decoration: none; /* Tar bort understrykning för länkar */
-    color: #FFF; /* Vit text */
+    text-decoration: none; 
+    color: #FFF; 
     font-weight: bold;
     border: none;
     cursor: pointer;
@@ -158,11 +155,10 @@ button:hover, input[type="submit"]:hover {
   }
   
   .delete-button {
-    background-color: #DC3545; /* Exempel: Röd för ta bort */
+    background-color: #DC3545; 
     border-radius: 10px;
   }
   
-
 
 
 
@@ -170,24 +166,22 @@ button:hover, input[type="submit"]:hover {
     display: inline-block;
     padding: 10px 15px;
     margin: 5px;
-    background-color: #0a8d48; /* Blå bakgrund */
-    color: white; /* Vit text */
-    text-decoration: none; /* Tar bort understrykningen */
-    border-radius: 5px; /* Lägger till rundade hörn */
-    transition: background-color 0.2s; /* Lägger till en mjuk övergångseffekt */
-    font-weight: bold; /* Gör texten fet */
+    background-color: #0a8d48; 
+    color: white; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    transition: background-color 0.2s; 
+    font-weight: bold; 
     font-size: 17px;
   }
   
   .button-style:hover {
-    background-color: #087334; /* En mörkare nyans av blått för hover-effekt */
+    background-color: #087334; 
   }
   
   .button:active {
-    background-color: #065c29; /* Ännu mörkare för klick-effekt */
+    background-color: #065c29; 
   }
-
-
 
 
 
@@ -195,19 +189,17 @@ button:hover, input[type="submit"]:hover {
     display: inline-block;
     padding: 8px 16px;
     margin: 5px;
-    background-color: #0a8d48; /* Blå bakgrund */
-    color: white; /* Vit text */
-    text-decoration: none; /* Tar bort understrykningen */
-    border-radius: 5px; /* Lägger till rundade hörn */
-    transition: background-color 0.2s; /* Lägger till en mjuk övergångseffekt */
-    font-weight: bold; /* Gör texten fet */
+    background-color: #0a8d48; 
+    color: white; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    transition: background-color 0.2s; 
+    font-weight: bold; 
   }
   
   .button-style2:hover {
-    background-color: #087334; /* En mörkare nyans av blått för hover-effekt */
+    background-color: #087334; 
   }
-
-
 
 
 
@@ -215,19 +207,14 @@ button:hover, input[type="submit"]:hover {
     display: inline-block;
     padding: 5px 10px;
     margin: 1px;
-    background-color: #0a8d48; /* Blå bakgrund */
-    color: white; /* Vit text */
-    text-decoration: none; /* Tar bort understrykningen */
-    border-radius: 5px; /* Lägger till rundade hörn */
-    transition: background-color 0.2s; /* Lägger till en mjuk övergångseffekt */
-    font-weight: bold; /* Gör texten fet */
+    background-color: #0a8d48;
+    color: white; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    transition: background-color 0.2s; 
+    font-weight: bold; 
   }
   
   .button-style3:hover {
-    background-color: #087334; /* En mörkare nyans av blått för hover-effekt */
+    background-color: #087334; 
   }
-  
-
-p{
-    font-weight: bold;
-}
