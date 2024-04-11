@@ -4,8 +4,10 @@ require 'sqlite3'
 require 'bcrypt'
 require 'sinatra/reloader'
 require 'sinatra/flash'
+require_relative 'model/model.rb'
 
 enable :sessions
+include Model
 
 
 # Visar startsidan
