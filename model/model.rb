@@ -3,145 +3,80 @@ require 'bcrypt'
 module Model
 
 
-# Registrerar en användare baserat på användarnamn och lösenord.
-# @param [String] username Användarnamnet för registrering i databasen.
-# @param [String] password Lösenordet för registrering i databasen.
-# @return [Hash, nil] Lägger till användaresn detaljer om registreringen och autentiseringen fungerar, annars nil.
-def self.authenticate_user(username, password)
-    db = db_connection
-    user = db.execute("SELECT * FROM user WHERE username = ?", [username]).first
-    return nil unless user
+# En klass som representerar en användare i systemet. Hanterar autentisering och rollkontroll.
+class User
+  attr_reader :username, :role
 
-    if BCrypt::Password.new(user["password"]) == password
-      user
+  # Konstruerar en ny användare.
+  # @param username [String] användarens användarnamn
+  # @param password_digest [String] hashat lösenord för användaren
+  # @param role [Integer] användarens roll i systemet
+  def initialize(username, password_digest, role)
+    @username = username
+    @password_digest = password_digest
+    @role = role
+  end
+end
+
+  # Autentiserar en användare baserat på ett lösenord.
+  # @param password [String] lösenordet som ska verifieras mot det hashade lösenordet
+  # @return [Boolean] sant om lösenordet matchar det lagrade hashade lösenordet, annars falskt
+  def authenticate(password)
+    BCrypt::Password.new(@password_digest) == password
+  end
+end
+
+# Klassen representerar en gymlogg i systemet, hanterar data och interaktioner relaterade till gymloggar.
+class Gymlog
+  attr_reader :id, :user_id, :dag, :exercise
+
+  # Initialiserar en ny Gymlog.
+  # @param id [Integer] ID för loggen, nil för nya loggar som inte sparats än.
+  # @param user_id [Integer] ID för användaren som äger loggen.
+  # @param dag [Date] Datumet för gymloggen.
+  # @param exercise [String] Beskrivning av övningen.
+  def initialize(id, user_id, dag, exercise)
+    @id = id
+    @user_id = user_id
+    @dag = dag
+    @exercise = exercise
+  end
+
+  # Sparar loggen till databasen.
+  def save
+    if id
+      # Uppdatera befintlig logg
     else
-      nil
+      # Skapa ny logg
     end
+  end
 end
-  
 
-# Skapar en ny användare i databasen.
-# @param [String] username Användarnamnet.
-# @param [String] password Lösenordet.
-# @param [String] password_confirm Lösenordsbekräftelse.
-# @return [Boolean] True om användaren lyckades skapas, annars false.
-def self.create_user(username, password, password_confirm)
-    return false unless password == password_confirm
+# Klassen representerar en övning i systemet, hanterar data och interaktioner relaterade till övningar.
+class Exercise
+  attr_reader :id, :type_id, :exercise
 
-    db = db_connection
-    password_digest = BCrypt::Password.create(password)
-    begin
-      db.execute("INSERT INTO user (username, password, role) VALUES (?, ?, ?)", [username, password_digest, 1])
-      true
-    rescue
-      false
+  # Initialiserar en ny övning.
+  # @param id [Integer] ID för övningen, nil för nya övningar som inte sparats än.
+  # @param type_id [Integer] ID för övningstypen som övningen tillhör.
+  # @param exercise [String] Namn eller beskrivning av övningen.
+  def initialize(id, type_id, exercise)
+    @id = id
+    @type_id = type_id
+    @exercise = exercise
+  end
+
+  # Sparar övningen till databasen. Skapar en ny post om den inte finns, annars uppdaterar.
+  def save
+    if id.nil?
+      # Skapa ny post
+    else
+      # Uppdatera befintlig post
     end
-end
-  
+  end
 
-# Loggar ut användaren genom att rensa sessionen.
-def self.logout_user
-end 
-
-
-# Hämtar alla gymloggar för en specifik användare.
-# @param [Integer] user_id Användarens roll/session.
-# @return [Array<Hash>] En lista över alla gymloggar associerade med användaren.
-def self.get_gymlogs_for_user(user_id)
-    db = db_connection
-    db.execute("SELECT * FROM gymlog WHERE user_id = ?", [user_id])
-end
-
-
-# Lägger till en ny gymlogg för en användare.
-# @param [Integer] user_id Användarens ID.
-# @param [String] dag Datumet för gymloggen.
-# @param [String] exercise Övningen som loggades.
-# @return [Boolean] True om gymloggen skapades, annars false.
-def self.add_gymlog(user_id, dag, exercise)
-    db = db_connection
-    begin
-      db.execute("INSERT INTO gymlog (user_id, dag, exercise) VALUES (?, ?, ?)", [user_id, dag, exercise])
-      true
-    rescue
-      false
-    end
-end
-
-# Uppdaterar en befintlig gymlogg.
-# @param [Integer] log_id Gymloggens ID.
-# @param [String] dag Det nya datumet för gymloggen.
-# @param [String] exercise Den uppdaterade övningen.
-# @return [Boolean] True om gymloggen uppdaterades, annars false.
-def self.update_gymlog(gymlog_id, dag, exercise)
-    db = db_connection
-    begin
-      db.execute("UPDATE gymlog SET dag = ?, exercise = ? WHERE gymlog_id = ?", [dag, exercise, gymlog_id])
-      true
-    rescue
-      false
-    end
-end
-
-# Raderar en specifik gymlogg.
-# @param [Integer] log_id Gymloggens unika ID.
-# @return [Boolean] True om gymloggen raderades, annars false.
-def self.delete_gymlog(log_id)
-    db = db_connection
-    begin
-      db.execute("DELETE FROM gymlog WHERE id = ?", [log_id])
-      true
-    rescue
-      false
-    end
-end
-
-# Hämtar en lista över alla övningstyper.
-# @return [Array<Hash>] En lista över alla övningstyper.
-def self.get_exercise_types
-    db = db_connection
-    db.execute("SELECT * FROM type")
-end
-
-# Lägger till en ny övning.
-# @param [String] exercise Namnet på övningen.
-# @param [Integer] type_id ID för övningstypen övningen tillhör.
-# @return [Boolean] True om övningen skapades, annars false.
-def self.add_exercise(exercise, type_id)
-    db = db_connection
-    begin
-      db.execute("INSERT INTO exercise (exercise, type_id) VALUES (?, ?)", [exercise, type_id])
-      true
-    rescue
-      false
-    end
-end
-
-# Uppdaterar en befintlig övning.
-# @param [Integer] exercise_id Övningens ID.
-# @param [String] new_exercise Det uppdaterade namnet på övningen.
-# @return [Boolean] True om övningen uppdaterades, annars false.
-def self.update_exercise(exercise_id, new_exercise)
-    db = db_connection
-    begin
-      db.execute("UPDATE exercise SET exercise = ? WHERE id = ?", [new_exercise, exercise_id])
-      true
-    rescue
-      false
-    end
-end
-
-# Raderar en specifik övning.
-# @param [Integer] exercise_id Övningens ID.
-# @return [Boolean] True om övningen raderades framgångsrikt, annars false.
-def self.delete_exercise(exercise_id)
-    db = db_connection
-    begin
-      db.execute("DELETE FROM exercise WHERE id = ?", [exercise_id])
-      true
-    rescue
-      false
-    end
-end
-
+  # Uppdaterar detaljer för en befintlig övning.
+  def update_attributes(attributes)
+    # Uppdatera attribut för övningen
+  end
 end

@@ -1,4 +1,4 @@
-- if @admin_access
+- if admin_access
   a href="/exercise/new" Lägg till en ny övning
 
 table
@@ -9,7 +9,7 @@ table
     - @result.each do |row|
       tr
         td= row['exercise']
-        - if @admin_access
+        - if admin_access
           td
             a href="/exercise/#{row['id']}/edit" Redigera
             form action="/exercise/#{row['id']}/delete" method="post"

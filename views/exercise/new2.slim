@@ -1,8 +1,10 @@
 form action="/exercise/new" method="post"
   label for="exercise" Namn:
   input type="text" name="exercise" id="exercise"
+
   label for="type-id" Muskelgrupp:
   select name="type-id" id="type-id"
     - @result.each do |muscle_group|
       option value="#{muscle_group['id']}" = muscle_group['muscle-group']
+
   input type="submit" value="Lägg till övning"
